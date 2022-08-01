@@ -1,6 +1,7 @@
 package com.example.eadtest.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,14 +15,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "sales")
 public class Sale {
-    @EmbeddedId
-    private SaleId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
     private String salesmanID;
-    @ManyToOne
-    @MapsId("productId")
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false)
-    @JsonBackReference
-    private Product product;
     private String salesmanName;
     private String dos;
+    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "product_id")
+    private Product product;
 }
